@@ -1,7 +1,5 @@
-package ru.boris.mapper.lists;
+package ru.boris.mapper.lists.service;
 
-
-import com.sun.istack.internal.NotNull;
 
 /**
  * Describes latitude nomenclature zones: latin letters from A to V by 4 degree length.
@@ -50,4 +48,14 @@ public enum LatZones
         if (this.toString().length() == 2)  return MAX_ZONE - n - 1;
         else                                return n + 1;
     }
+
+    public int to(final LatZones z)
+    {
+        if (this.toString().length() == z.toString().length())
+            return Math.abs(this.ordinal() - z.ordinal());
+        else
+            return 0;
+    }
+
+
 }

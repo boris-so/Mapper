@@ -1,6 +1,9 @@
 package ru.boris.mapper.lists;
 
-import static ru.boris.mapper.lists.LatZones.fromNum;
+import ru.boris.mapper.lists.service.LatZones;
+import ru.boris.mapper.lists.service.WGS84Point;
+
+import static ru.boris.mapper.lists.service.LatZones.fromNum;
 
 public class List10km
 {
@@ -28,6 +31,11 @@ public class List10km
 
         this.lat = lat;
         this.lon = lon;
+    }
+
+    public List10km(final WGS84Point p)
+    {
+        // todo: 4
     }
 
     // region Calculations
@@ -58,26 +66,51 @@ public class List10km
         }
     }
 
+    /**
+     * Calculates offset in longitude zones (total 60 by nomenclature)
+     * @param n ofset value.
+     * @return another list with given offset.
+     * @throws IllegalArgumentException if offset is more than 59 (offset 59 is a full row).
+     */
     public List10km lonOfs(final int n) throws IllegalArgumentException
     {
-        return null;
+        if (Math.abs(n) >= MAX_ZONE) throw new IllegalArgumentException("Offset is out of range (max - 59)");
+
+        int res = this.lon + n;
+        if (res > 60) return new List10km(this.lat, res - 60);
+        if (res < 1)  return new List10km(this.lat, 60 + res);
+        return new List10km(this.lat, res);
     }
 
     public List10km diagonalOfs(final int lat, final int lon) throws IllegalArgumentException
     {
         return this.latOfs(lat).lonOfs(lon);
     }
+
+    public List10km[][] getArea(final List10km from, final List10km to)
+    {
+        // todo: 2
+        return new List10km[0][0];
+    }
+
     // endregion
 
 
-    @Override public boolean equals(Object obj)
+    @Override public boolean equals(Object o)
     {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (getClass() != obj.getClass()) return false;
+        if (this == o) return true;
+        if (!(o instanceof List10km)) return false;
 
-        List10km other = (List10km) obj;
-        return this.lon == other.lon && this.lat == other.lat;
+        List10km list10km = (List10km) o;
+
+        return lon == list10km.lon && lat == list10km.lat;
+    }
+
+    @Override public int hashCode()
+    {
+        int result = lat.hashCode();
+        result = 31 * result + lon;
+        return result;
     }
 
     @Override public String toString()

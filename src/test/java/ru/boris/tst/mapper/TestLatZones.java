@@ -3,7 +3,7 @@ package ru.boris.tst.mapper;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static ru.boris.mapper.lists.LatZones.*;
+import static ru.boris.mapper.lists.service.LatZones.*;
 
 public class TestLatZones
 {
@@ -28,6 +28,18 @@ public class TestLatZones
         assertEquals(xA.getNumber(),    -1);
         assertEquals(xM.getNumber(),    -13);
         assertEquals(xV.getNumber(),    -22);
+    }
+
+    @Test public void between()
+    {
+        assertEquals(A.to(D), 3);
+        assertEquals(U.to(J), 11);
+
+        assertEquals(xD.to(xN), 10);
+        assertEquals(xT.to(xN), 6);
+
+        assertEquals(H.to(xH), 15);
+        assertEquals(xV.to(V), 43);
     }
 
 
